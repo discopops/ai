@@ -1,7 +1,6 @@
 import {
   LanguageModelV3Content,
   LanguageModelV3FunctionTool,
-  LanguageModelV3GenerateResult,
   LanguageModelV3Prompt,
   LanguageModelV3StreamPart,
 } from '@ai-sdk/provider';
@@ -62,6 +61,10 @@ function createModel(modelId: string, fileIdPrefixes?: readonly string[]) {
     fileIdPrefixes,
   });
 }
+
+type GenerateResult = Awaited<
+  ReturnType<OpenAIResponsesLanguageModel['doGenerate']>
+>;
 
 describe('OpenAIResponsesLanguageModel', () => {
   const server = createTestServer({
@@ -2283,7 +2286,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('code interpreter tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-code-interpreter-tool.1');
@@ -2360,7 +2363,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('image generation tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-image-generation-tool.1');
@@ -2417,7 +2420,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('local shell tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-local-shell-tool.1');
@@ -2465,7 +2468,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('web search tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-web-search-tool.1');
@@ -2516,7 +2519,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('shell tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-shell-tool.1');
@@ -2564,7 +2567,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('shell tool with container (no skills)', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-shell-container.1');
@@ -2665,7 +2668,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('shell tool with container multiturn', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       const MULTITURN_PROMPT: LanguageModelV3Prompt = [
         {
@@ -2821,7 +2824,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('shell tool with local multiturn', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       const MULTITURN_PROMPT: LanguageModelV3Prompt = [
         {
@@ -2979,7 +2982,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('shell tool with environment', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-shell-skills.1');
@@ -3283,7 +3286,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('mcp tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-mcp-tool.1');
@@ -3543,7 +3546,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('file search tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       describe('without results include', () => {
         beforeEach(async () => {
@@ -3697,7 +3700,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('apply_patch tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       describe('create_file operation', () => {
         beforeEach(async () => {
@@ -3747,7 +3750,7 @@ describe('OpenAIResponsesLanguageModel', () => {
     });
 
     describe('custom tool', () => {
-      let result: LanguageModelV3GenerateResult;
+      let result: GenerateResult;
 
       beforeEach(async () => {
         prepareJsonFixtureResponse('openai-custom-tool.1');

@@ -12,7 +12,9 @@ on:
       - main
       - release-v*
 
-concurrency: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
