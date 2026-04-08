@@ -341,6 +341,19 @@ export interface DurableAgentOptions extends GenerationSettings {
    * Callback that is called when the LLM response and all request tool executions are finished.
    */
   onFinish?: StreamTextOnFinishCallback<ToolSet>;
+
+  /**
+   * Experimental context forwarded into step/tool callbacks.
+   */
+  experimental_context?: unknown;
+
+  /**
+   * Experimental lifecycle hooks mirrored from stream options for compatibility.
+   */
+  experimental_onStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onStepStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onToolCallStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onToolCallFinish?: (event: any) => PromiseLike<void> | void;
 }
 
 /**
@@ -517,6 +530,14 @@ export interface DurableAgentStreamOptions<
    * Defaults to false.
    */
   includeRawChunks?: boolean;
+
+  /**
+   * Experimental lifecycle hooks for start/step/tool-call events.
+   */
+  experimental_onStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onStepStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onToolCallStart?: (event: any) => PromiseLike<void> | void;
+  experimental_onToolCallFinish?: (event: any) => PromiseLike<void> | void;
 
   /**
    * A function that attempts to repair a tool call that failed to parse.

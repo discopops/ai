@@ -22,6 +22,7 @@ import type {
 } from './durable-agent.js';
 import type { CompatibleLanguageModel } from './types.js';
 
+type FinishPart = StreamFinishPart;
 export type { StreamFinishPart as FinishPart };
 
 export type ModelStopCondition = StopCondition<NoInfer<ToolSet>>;
@@ -483,10 +484,10 @@ export async function doStreamStep(
     .pipeTo(writable, { preventClose: true });
 
   const step = chunksToStepResult({
-    chunks,
-    toolCalls,
-    prompt: conversationPrompt,
-    finish,
+    chunks: chunks as any,
+    toolCalls: toolCalls as any,
+    prompt: conversationPrompt as any,
+    finish: finish as any,
   });
   return {
     toolCalls,

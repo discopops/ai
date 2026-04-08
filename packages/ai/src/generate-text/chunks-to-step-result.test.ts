@@ -90,8 +90,14 @@ describe('chunksToStepResult', () => {
 
     expect(result.reasoningText).toBe('Think carefully');
     expect(result.reasoning).toHaveLength(2);
-    expect(result.reasoning[0].text).toBe('Think ');
-    expect(result.reasoning[1].text).toBe('carefully');
+    expect(result.reasoning[0]).toMatchObject({
+      type: 'reasoning',
+      text: 'Think ',
+    });
+    expect(result.reasoning[1]).toMatchObject({
+      type: 'reasoning',
+      text: 'carefully',
+    });
   });
 
   it('should include tool calls in content', () => {
@@ -236,7 +242,7 @@ describe('chunksToStepResult', () => {
         type: 'stream-start',
         warnings: [
           {
-            type: 'unsupported-setting',
+            type: 'unsupported',
             setting: 'temperature',
             details: 'not supported',
           },
@@ -253,7 +259,7 @@ describe('chunksToStepResult', () => {
 
     expect(result.warnings).toHaveLength(1);
     expect(result.warnings![0]).toMatchObject({
-      type: 'unsupported-setting',
+      type: 'unsupported',
       setting: 'temperature',
     });
   });
