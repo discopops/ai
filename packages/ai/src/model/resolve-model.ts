@@ -136,12 +136,17 @@ export function resolveVideoModel(
   if (typeof model === 'string') {
     // Use raw global provider because videoModel is experimental
     // and not part of the ProviderV4 interface
-    const provider = globalThis.AI_SDK_DEFAULT_PROVIDER ?? gateway;
-    // TODO AI SDK v7
-    // @ts-expect-error - videoModel support is experimental
+    const provider =
+      (
+        globalThis as typeof globalThis & {
+          AI_SDK_DEFAULT_PROVIDER?: {
+            videoModel?: Experimental_VideoModelV4;
+          };
+        }
+      ).AI_SDK_DEFAULT_PROVIDER ?? gateway;
     const videoModel = provider.videoModel;
 
-    if (!videoModel) {
+    if (typeof videoModel !== 'function') {
       throw new Error(
         'The default provider does not support video models. ' +
           'Please use a Experimental_VideoModelV4 object from a provider (e.g., vertex.video("model-id")).',
@@ -167,6 +172,11 @@ export function resolveVideoModel(
 }
 
 function getGlobalProvider(): ProviderV4 {
-  const provider = globalThis.AI_SDK_DEFAULT_PROVIDER ?? gateway;
+  const provider =
+    (
+      globalThis as typeof globalThis & {
+        AI_SDK_DEFAULT_PROVIDER?: ProviderV4;
+      }
+    ).AI_SDK_DEFAULT_PROVIDER ?? gateway;
   return asProviderV4(provider);
 }

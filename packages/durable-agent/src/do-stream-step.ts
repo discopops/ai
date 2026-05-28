@@ -9,6 +9,7 @@ import type {
 import {
   gateway,
   generateId,
+  type StepResult,
   type StopCondition,
   type ToolChoice,
   type ToolSet,
@@ -22,7 +23,8 @@ import type {
 } from './durable-agent.js';
 import type { CompatibleLanguageModel } from './types.js';
 
-export type { StreamFinishPart as FinishPart };
+type FinishPart = StreamFinishPart;
+export type { FinishPart };
 
 export type ModelStopCondition = StopCondition<NoInfer<ToolSet>>;
 
@@ -107,7 +109,13 @@ export async function doStreamStep(
   writable: WritableStream<UIMessageChunk>,
   tools?: LanguageModelV4CallOptions['tools'],
   options?: DoStreamStepOptions,
-) {
+): Promise<{
+  toolCalls: LanguageModelV4ToolCall[];
+  finish: FinishPart | undefined;
+  step: StepResult<ToolSet>;
+  uiChunks: UIMessageChunk[] | undefined;
+  providerExecutedToolResults: Map<string, ProviderExecutedToolResult>;
+}> {
   'use step';
 
   let model: CompatibleLanguageModel | undefined;
@@ -483,10 +491,14 @@ export async function doStreamStep(
     .pipeTo(writable, { preventClose: true });
 
   const step = chunksToStepResult({
-    chunks,
-    toolCalls,
-    prompt: conversationPrompt,
-    finish,
+    chunks: chunks as Parameters<typeof chunksToStepResult>[0]['chunks'],
+    toolCalls: toolCalls as Parameters<
+      typeof chunksToStepResult
+    >[0]['toolCalls'],
+    prompt: conversationPrompt as Parameters<
+      typeof chunksToStepResult
+    >[0]['prompt'],
+    finish: finish as Parameters<typeof chunksToStepResult>[0]['finish'],
   });
   return {
     toolCalls,
